@@ -1,0 +1,22 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# PyInstaller
+build/
+dist/
+
+# Application specific
+*.exe
+*.xlsx
+*.txt
+OUTPUT/
+generated/
+whatsapp_session/
+scratch/
+test/
+
+# OS generated files
+.DS_Store
+Thumbs.db
