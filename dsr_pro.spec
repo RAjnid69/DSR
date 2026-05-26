@@ -1,11 +1,11 @@
 # -*- mode: python ; coding: utf-8 -*-
 
-
+from PyInstaller.utils.hooks import collect_data_files
 a = Analysis(
     ['dsr_pro.py'],
     pathex=[],
     binaries=[],
-    datas=[('C:\\Users\\NITRO\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\customtkinter', 'customtkinter/'), ('assets', 'assets/')],
+    datas=collect_data_files('customtkinter') + [('assets', 'assets/')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
@@ -22,7 +22,7 @@ exe = EXE(
     a.binaries,
     a.datas,
     [],
-    name='Agro_DSR_Pro_v5.0',
+    name='Agro_DSR_Pro',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,

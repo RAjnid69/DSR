@@ -27,9 +27,10 @@ _FIELD_SYNONYMS = {
                     'head quarter','headqarter','headquartor','headquter','headq'],
     'INCHARGE':    ['incharge','incharge name','inchargename','in charge','in charge name',
                     'route incharge name','route incharge','staff','staff name','staffname',
-                    'salesman','sales man','by','reported by','name','नाम'],
+                    'salesman','sales man','by','reported by','name','नाम','supervisor','supervisor name','name supervisor'],
     'ROUTE':       ['route','route point','routepoint','route name','routename','route no',
-                    'route(point)','routepoint','beat','beat name','beat no','territory','sector'],
+                    'route(point)','routepoint','beat','beat name','beat no','territory','sector',
+                    'road','road point','road(point)'],
     'OUTLETNAME':  ['outlet name','outletname','outlet','outlen name','outletnam','outlets name',
                     "outlet name'","outlet name' ","outlet :","outlet-",
                     'shop name','shopname','shop','store','store name','party','party name',
@@ -163,7 +164,14 @@ def block_to_dict(block):
         if not val_raw and i < len(lines) and lines[i]:
             nxt = lines[i].strip()
             if nxt and not _SEP_RE.match(nxt):
-                val_raw = nxt; i += 1
+                nxt_norm = re.sub(r'[^A-Z0-9]', '', nxt.upper())
+                is_known_key = False
+                for k in FIELD_MAP.keys():
+                    if nxt_norm == k or (nxt_norm.startswith(k) and len(k) >= 5):
+                        is_known_key = True
+                        break
+                if not is_known_key:
+                    val_raw = nxt; i += 1
                 
         val_raw = val_raw.lstrip(':=\u2013|-').strip()
         if canonical not in d or not d[canonical]:
@@ -244,34 +252,34 @@ def process_single_file(filepath, filter_date=None):
             "DPS REMARK": "",
             
             # PHYSICAL STOCK
-            "S_MT 250": get_val(stock_d, ["MT250"], clean_numeric=True),
-            "S_MT 330": get_val(stock_d, ["MT330"], clean_numeric=True),
-            "S_XT 330": get_val(stock_d, ["XT330"], clean_numeric=True),
-            "S_JJ 200ML": get_val(stock_d, ["JJ200ML"], clean_numeric=True),
-            "S_JJ 320ML": get_val(stock_d, ["JJ320ML"], clean_numeric=True),
-            "S_BB NIMBOO": get_val(stock_d, ["BAMBAMNIMBOO"], clean_numeric=True),
-            "S_BB MIST": get_val(stock_d, ["BAMBAMMIST"], clean_numeric=True),
-            "S_BB COLA": get_val(stock_d, ["BAMBAMCOLA"], clean_numeric=True),
-            "S_BB HYDRATION": get_val(stock_d, ["BAMBAMHYDRATION"], clean_numeric=True),
-            "S_CSD": get_val(stock_d, ["CSD"], clean_numeric=True),
-            "S_BB 2.5L": get_val(stock_d, ["BAMBAM25L"], clean_numeric=True),
-            "S_MT CLASSIC": get_val(stock_d, ["MTCLASSIC"], clean_numeric=True),
-            "S_OTHERS": get_val(stock_d, ["OTHERS"], clean_numeric=True),
+            "S_MT 250": get_val(stock_d, ["MT250"], clean_numeric=False),
+            "S_MT 330": get_val(stock_d, ["MT330"], clean_numeric=False),
+            "S_XT 330": get_val(stock_d, ["XT330"], clean_numeric=False),
+            "S_JJ 200ML": get_val(stock_d, ["JJ200ML"], clean_numeric=False),
+            "S_JJ 320ML": get_val(stock_d, ["JJ320ML"], clean_numeric=False),
+            "S_BB NIMBOO": get_val(stock_d, ["BAMBAMNIMBOO"], clean_numeric=False),
+            "S_BB MIST": get_val(stock_d, ["BAMBAMMIST"], clean_numeric=False),
+            "S_BB COLA": get_val(stock_d, ["BAMBAMCOLA"], clean_numeric=False),
+            "S_BB HYDRATION": get_val(stock_d, ["BAMBAMHYDRATION"], clean_numeric=False),
+            "S_CSD": get_val(stock_d, ["CSD"], clean_numeric=False),
+            "S_BB 2.5L": get_val(stock_d, ["BAMBAM25L"], clean_numeric=False),
+            "S_MT CLASSIC": get_val(stock_d, ["MTCLASSIC"], clean_numeric=False),
+            "S_OTHERS": get_val(stock_d, ["OTHERS"], clean_numeric=False),
 
             # ORDER
-            "O_MT 250": get_val(order_d, ["MT250"], clean_numeric=True),
-            "O_MT 330": get_val(order_d, ["MT330"], clean_numeric=True),
-            "O_XT 330": get_val(order_d, ["XT330"], clean_numeric=True),
-            "O_JJ 200ML": get_val(order_d, ["JJ200ML"], clean_numeric=True),
-            "O_JJ 320ML": get_val(order_d, ["JJ320ML"], clean_numeric=True),
-            "O_BB NIMBOO": get_val(order_d, ["BAMBAMNIMBOO"], clean_numeric=True),
-            "O_BB MIST": get_val(order_d, ["BAMBAMMIST"], clean_numeric=True),
-            "O_BB COLA": get_val(order_d, ["BAMBAMCOLA"], clean_numeric=True),
-            "O_BB HYDRATION": get_val(order_d, ["BAMBAMHYDRATION"], clean_numeric=True),
-            "O_CSD": get_val(order_d, ["CSD"], clean_numeric=True),
-            "O_BB 2.5L": get_val(order_d, ["BAMBAM25L"], clean_numeric=True),
-            "O_MT CLASSIC": get_val(order_d, ["MTCLASSIC"], clean_numeric=True),
-            "O_OTHERS": get_val(order_d, ["OTHERS"], clean_numeric=True),
+            "O_MT 250": get_val(order_d, ["MT250"], clean_numeric=False),
+            "O_MT 330": get_val(order_d, ["MT330"], clean_numeric=False),
+            "O_XT 330": get_val(order_d, ["XT330"], clean_numeric=False),
+            "O_JJ 200ML": get_val(order_d, ["JJ200ML"], clean_numeric=False),
+            "O_JJ 320ML": get_val(order_d, ["JJ320ML"], clean_numeric=False),
+            "O_BB NIMBOO": get_val(order_d, ["BAMBAMNIMBOO"], clean_numeric=False),
+            "O_BB MIST": get_val(order_d, ["BAMBAMMIST"], clean_numeric=False),
+            "O_BB COLA": get_val(order_d, ["BAMBAMCOLA"], clean_numeric=False),
+            "O_BB HYDRATION": get_val(order_d, ["BAMBAMHYDRATION"], clean_numeric=False),
+            "O_CSD": get_val(order_d, ["CSD"], clean_numeric=False),
+            "O_BB 2.5L": get_val(order_d, ["BAMBAM25L"], clean_numeric=False),
+            "O_MT CLASSIC": get_val(order_d, ["MTCLASSIC"], clean_numeric=False),
+            "O_OTHERS": get_val(order_d, ["OTHERS"], clean_numeric=False),
             
             # DISPATCH (Placeholders)
             "D_MT 250": 0, "D_MT 330": 0, "D_XT 330": 0, "D_JJ 200ML": 0, "D_JJ 320ML": 0,
@@ -478,7 +486,7 @@ def apply_styling(writer, df, sheet_name, report_type_label):
             val = df.iloc[row_idx, col_idx]
             is_numeric = len(headers) <= col_idx < (len(df.columns) - 1)
             
-            if pd.isna(val) or val == 0 or val == "0":
+            if pd.isna(val) or val == 0 or val == "0" or val == "":
                 worksheet.write_blank(row_idx + 2, col_idx, None, num_fmt if is_numeric else cell_fmt)
             else:
                 fmt = num_fmt if is_numeric else cell_fmt
@@ -518,7 +526,7 @@ class ModernDSRApp(ctk.CTk):
     def __init__(self):
         super().__init__()
 
-        self.title("Agro DSR Pro v5.5 Universal")
+        self.title("Agro DSR Pro v6.0")
         self.geometry("850x600") # Slightly wider for the logo
         
         # Set Window Icon

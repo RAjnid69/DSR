@@ -1,12 +1,12 @@
-; Inno Setup Script for Agro DSR Professional v5.5 Universal
+; Inno Setup Script for Agro DSR Professional v7.0
 [Setup]
 AppName=Agro DSR Professional
-AppVersion=5.5
+AppVersion=7.0
 AppPublisher=Agro Thai - Rajnikant Joshi
 DefaultDirName={pf}\Agro DSR Professional
 DefaultGroupName=Agro DSR Professional
 OutputDir=.
-OutputBaseFilename=Agro_DSR_Pro_Setup_v5.5
+OutputBaseFilename=Agro_DSR_Pro_Setup_v7.0
 SetupIconFile=assets\xtreme.ico
 Compression=lzma2
 SolidCompression=yes
@@ -21,6 +21,7 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Files]
 Source: "dist\Agro_DSR_Pro.exe"; DestDir: "{app}"; Flags: ignoreversion
+; staff_registry.json is created by the app on first run — not bundled
 
 [Icons]
 Name: "{group}\Agro DSR Professional"; Filename: "{app}\Agro_DSR_Pro.exe"
